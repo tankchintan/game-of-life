@@ -15,7 +15,7 @@ public class GameOfLife {
     int universeSize = inputValidator.getUniverseSize();
     int ticks = inputValidator.getTicks();
 
-    log(String.format("Playing Game of Life with universe size %s for %s ticks.", universeSize, ticks));
+    log("Playing Game of Life with universe size %s for %s ticks.", universeSize, ticks);
 
     int currentTick = 0;
 
@@ -36,12 +36,12 @@ public class GameOfLife {
   }
 
   private static void renderUniverseState(int currentTick, String state) {
-    log("Rendering state at tick: " + currentTick);
+    log("Rendering state at tick: ", currentTick);
     log(state);
   }
 
-  private static void log(String log) {
-    System.out.println(log);
+  private static void log(String logPattern, Object... parameters) {
+    System.out.println(String.format(logPattern, parameters));
   }
 
   private static class InputValidator {
@@ -67,10 +67,10 @@ public class GameOfLife {
       * */
       if (args.length != 0 && args.length != 2) {
 
-        log(String.format("Please provide 2 arguments for running the program."
+        log("Please provide 2 arguments for running the program."
             + "\n\t1st argument for conveying size of the universe. Default is '%s'."
             + "\n\t2nd argument for conveying number of ticks for which to run the game of life. "
-            + "Default is '%s'.", GameConstants.DEFAULT_UNIVERSE_SIZE, GameConstants.DEFAULT_TICKS));
+            + "Default is '%s'.", GameConstants.DEFAULT_UNIVERSE_SIZE, GameConstants.DEFAULT_TICKS);
         System.exit(-1);
       }
 
@@ -82,22 +82,22 @@ public class GameOfLife {
           universeSize = Integer.parseInt(args[0]);
           ticks = Integer.parseInt(args[1]);
         } catch (NumberFormatException ex) {
-          log(String.format("Please provide integer arguments for running the program."
+          log("Please provide integer arguments for running the program."
               + "\n\t1st argument: %s"
-              + "\n\t2nd argument: %s", args[0], args[1]));
+              + "\n\t2nd argument: %s", args[0], args[1]);
           System.exit(-1);
         }
       }
 
       if (universeSize < 1) {
-        log(String.format("Please provide positive universe size."
-            + "\n\tCurrent value: %s", universeSize));
+        log("Please provide positive universe size."
+            + "\n\tCurrent value: %s", universeSize);
         System.exit(-1);
       }
 
       if (ticks < 0) {
-        log(String.format("Please provide non-negative universe size."
-            + "\n\tCurrent value: %s", ticks));
+        log("Please provide non-negative universe size."
+            + "\n\tCurrent value: %s", ticks);
         System.exit(-1);
       }
       return this;

@@ -2,8 +2,7 @@ package main.java.assignment.models;
 
 import main.java.assignment.constants.RulesConstants;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Chintan Tank on 9/2/17.
@@ -13,40 +12,40 @@ public class Cell {
   private int rowIndex;
   private int colIndex;
   private boolean isAlive = false;
-  private Set<Cell> aliveNeighbors = new HashSet<>();
+  private AtomicInteger aliveNeighborsCount = new AtomicInteger(0);
 
   public Cell(int rowIndex, int colIndex) {
     this.rowIndex = rowIndex;
     this.colIndex = colIndex;
   }
 
-  public boolean addAliveNeighbor(Cell aliveNeighbor) {
-    return this.aliveNeighbors.add(aliveNeighbor);
+  public int registerAliveNeighbor() {
+    return this.aliveNeighborsCount.incrementAndGet();
   }
 
   public boolean setNextGenerationState() {
 
-    int aliveNeighborCount = aliveNeighbors.size();
-    this.aliveNeighbors = new HashSet<>();
-
     boolean isGoingToBeAliveNextTick = this.isAlive;
 
     if (this.isAlive) {
-      if (aliveNeighborCount > RulesConstants.MAX_ALIVE_NEIGHBORS_FOR_SELF_ALIVENESS) {
-//        this.isAlive = false;
+      if (this.aliveNeighborsCount.get() > RulesConstants.MAX_ALIVE_NEIGHBORS_FOR_SELF_ALIVENESS) {
         isGoingToBeAliveNextTick = false;
 
-      } else if (aliveNeighborCount < RulesConstants.MIN_ALIVE_NEIGHBORS_FOR_SELF_ALIVENESS) {
-//        this.isAlive = false;
+      } else if (this.aliveNeighborsCount.get() < RulesConstants.MIN_ALIVE_NEIGHBORS_FOR_SELF_ALIVENESS) {
         isGoingToBeAliveNextTick = false;
       }
     } else {
-      if (aliveNeighborCount == RulesConstants.ALIVE_NEIGHBORS_FOR_REGENERATION) {
-//        this.isAlive = true;
+      if (this.aliveNeighborsCount.get() == RulesConstants.ALIVE_NEIGHBORS_FOR_REGENERATION) {
         isGoingToBeAliveNextTick = true;
       }
     }
 
+    this.aliveNeighborsCount.set(0);
+
+    /*
+    * The cell's state in next generation is going to be different if the new value for aliveness
+     * is different from current isAlive.
+    * */
     boolean nextGenerationStateDifferent = (isGoingToBeAliveNextTick != this.isAlive);
 
     this.isAlive = isGoingToBeAliveNextTick;

@@ -100,7 +100,7 @@ public class Universe {
             if (neighborRow >= 0 && neighborRow < universeWidth
                 && neighborCol >= 0 && neighborCol < universeWidth) {
               getCellAt(neighborRow, neighborCol)
-                  .addAliveNeighbor(cell);
+                  .registerAliveNeighbor();
             }
           }
         }
