@@ -1,0 +1,8 @@
+
+.DS_Store
+.idea/
+META-INF/
+game-of-life.iml
+main/.DS_Store
+main/java/.DS_Store
+out/
